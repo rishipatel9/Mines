@@ -1,14 +1,31 @@
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import Navbar from "../ui/Navbar.js";
 import Tile from "./Tile.js";
-const Game = () => {
+import { useDispatch } from "react-redux";
+import { fillUp } from "../../utility/minesIndexSlice.js";
 
+const Game = () => {
     axios.defaults.withCredentials = true;
-    
+    const [mines,setMines]=useState(1);
     const history=useNavigate();
+    const gridSize = 25; 
+    const dispatch=useDispatch();
+
+    const mineIndexUpdateHandler=()=>{
+        const newMinesIndex: number[] = [];
+        while (newMinesIndex.length < mines) {
+            const index = Math.floor(Math.random() * gridSize);
+            if (!newMinesIndex.includes(index)) {
+                newMinesIndex.push(index);
+            }
+        }  
+        console.log(newMinesIndex);
+        dispatch(fillUp(newMinesIndex))
+    };
+    
     useEffect(()=>{
         const isAuth=async()=>{
             const res=await axios.post('http://localhost:3000/game');
@@ -19,9 +36,15 @@ const Game = () => {
         isAuth()
     },[])
 
+    const handleOnchange=(event:any)=>{
+        setMines(event.target.value)
+    }   
+
     const [clicked,setClicked]=useState(true)
     const numbers = Array.from({ length: 24 }, (_, i) => i + 1);
     const tiles = Array.from({ length: 25 }, (_, i) => i + 1);
+
+    
     return (
 
         <div className='bg-[#1A2C38] lg:h-[100vh] lg:w-[100vw] md:h-[100vh] md:w-[100vw] sm:h-[100vh] sm:w-[100vw] h-[100vh] w-[100vw] flex justify-center items-center ' >
@@ -45,7 +68,7 @@ const Game = () => {
                     </div>
                     <div className="px-2 ">
                         <p className="text-left text-xs font-bold text-[#B2BBD3] p-1 "> Mines</p> 
-                        <select name="cars" id="cars" className="bg-[#0E222E]  lg:h-[43px] lg:w-[100%] md:h-[30px]  md:w-[100%] sm:w-[100%] sm:h-[35px] h-8 w-[100%]  lg:p-2  text-white border- border-[#0E222E] shadow-md ">
+                        <select name="cars" id="cars" className="bg-[#0E222E]  lg:h-[43px] lg:w-[100%] md:h-[30px]  md:w-[100%] sm:w-[100%] sm:h-[35px] h-8 w-[100%]  lg:p-2  text-white border- border-[#0E222E] shadow-md " onChange={handleOnchange} value={mines}>
                             {numbers.map(number => (
                                 <option key={number} value={number}>
                                     {number}
@@ -56,13 +79,14 @@ const Game = () => {
                     <div className="lg:w-[100%] lg:p-2  pt-4 ">
                         <button className="lg:w-[100%] lg:h-[50px] lg:mx-0 w-[95%] h-[48px] mx-2 rounded-sm font-bold bg-[#00E800]" onClick={()=>{
                             setClicked(false)
+                            mineIndexUpdateHandler()
                         }}>Bet</button>
                     </div>
                 </div>
                 <div className="lg:w-[75%] lg:h-[100%]   md:h-[410px] h-[390px] p-1 bg-[#0E222E] shadow-md flex justify-center lg:p-2">
                     <div className="grid xl:w-[80%] md:h-[100%] lg:w-[80%] 2xl:w-[84%] lg:m-0 pb-0  w-[100%] h-[90%]  grid-rows-5 grid-cols-5   place-items-center ">
-                        {tiles.map(tile=>(
-                            <Tile key={tile}></Tile>
+                        {Array.from({ length: gridSize }, (_, index) => (
+                            <Tile key={index} />
                         ))}
                     </div>
                 </div>
