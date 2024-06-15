@@ -8,7 +8,8 @@ export const minesIndexSlice=createSlice({
     initialState,
     reducers:{
         fillUp:(state,action)=>{
-            state.minesIndex=action.payload.mineIndex
+            state.minesIndex=action.payload
+            console.log(state.minesIndex);
         }
     }
 })
