@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Game from "./components/game/Game.js";
+import LeaderBoard from "./components/leaderboard/LeaderBoard.js";
 import Login from "./components/login/Login.js";
+import VibrateButton from "./components/Vibrator.js";
 
 
 function App() {
@@ -9,6 +11,8 @@ function App() {
       <Routes>
         <Route path="/game" element={<Game/>} />
         <Route path="/" element={<Login/>}/>
+        <Route path="/leaderboard" element={<LeaderBoard/>}/>
+        <Route path="/vibrate" element={<VibrateButton/>}/>
       </Routes>
     </BrowserRouter>
   )
