@@ -6,7 +6,6 @@ const Navbar = () => {
   const history = useNavigate();
 
   const removeCookie = async () => {
-
     try {
       await axios.get("http://localhost:3000/clear-cookie", {
         withCredentials: true,
