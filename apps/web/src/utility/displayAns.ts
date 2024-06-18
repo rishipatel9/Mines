@@ -9,11 +9,14 @@ export const displaySlice =createSlice({
     initialState,
     reducers:{
         displayAll:(state)=>{
-            state.display=true;
+                state.display=true;
+        },
+        displayNone:(state)=>{
+            state.display=false;
         }
     }
 })
 
-export const {displayAll} = displaySlice.actions
+export const {displayAll,displayNone} = displaySlice.actions
 
 export default displaySlice.reducer;

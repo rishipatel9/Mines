@@ -8,12 +8,14 @@ export const diamondCountSlice=createSlice({
     name:"DiamondCount",
     initialState,
     reducers:{
-        update:(state,actions)=>{
+        setDiamondCount:(state,actions)=>{
+            console.log(actions.payload)
             state.diamonds=actions.payload
-        }
+            console.log("state.diamond",state.diamonds)
+        },
     }
 })
 
-export const {update} = diamondCountSlice.actions
+export const {setDiamondCount} = diamondCountSlice.actions
 
 export default diamondCountSlice.reducer

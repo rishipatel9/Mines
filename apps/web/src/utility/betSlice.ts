@@ -9,12 +9,17 @@ export const betSlice =createSlice({
     name:"bet",
     initialState,
     reducers:{
-        isLive:(state,action)=>{
-            state.bet=action.payload
+        isLive:(state)=>{
+         state.bet=true;
+
+        },
+        toFalse:(state)=>{
+            state.bet=false;
         }
+
     }
 })
 
-export const {isLive} =betSlice.actions;
+export const {isLive,toFalse} =betSlice.actions;
 
 export default betSlice.reducer;
