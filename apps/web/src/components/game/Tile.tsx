@@ -1,9 +1,10 @@
-import { selectBet, selectDiamondCount, selectDisplayAll  } from "../../store/selectors.js"
+import { selectBet, selectDiamondCount, selectDisplayAll, selectMinesIndex  } from "../../store/selectors.js"
 import { useDispatch, useSelector } from "react-redux"
 import { isLive } from "../..//utility/betSlice.js";
 import { displayAll } from "../../utility/displayAns.js";
 import { addClick,resetClicks } from "../../utility/tileSlice.js";
-// import { updateDiamondCount } from "../../utility/diamondCount.js";
+import { updateDiamondCount } from "../../utility/diamondCount.js";
+import { upateMultiplier } from "../../utility/multiplier.js";
 interface TileProps {
   image: string,
   index:number
@@ -15,12 +16,33 @@ const Tile: React.FC<TileProps> = ({ image,index }) => {
   const isBetLive=useSelector(selectBet)
   const setDisplayAll =useSelector(selectDisplayAll)
   const clicks = useSelector((state: any) => state.tiles.clicks);
-  // const diamondCount=useSelector(selectDiamondCount);
+  const diamondCount=useSelector(selectDiamondCount);
+  const mines=useSelector(selectMinesIndex);
 
+  function factorial(n: number): number {
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+      result *= i;
+    }
+    return result;
+  }
+  
+  function nCr(n: number, r: number): number {
+    return factorial(n) / (factorial(r) * factorial(n - r));
+  }
+  
+  function calculateMultiplier(mines: number, diamonds: number): number {
+    const houseEdge = 0.01;
+    return (1 - houseEdge) * nCr(25, diamonds) / nCr(25 - mines, diamonds);
+  }
   const handleClick = () => {
     if(isBetLive.bet){
       dispatch(addClick({ index, value: true }));
-      // dispatch(updateDiamondCount())
+      dispatch(updateDiamondCount())    
+      const trueClicks = clicks.filter((click: boolean) => click === true).length;
+      console.log(trueClicks+1);
+      const multiplier = calculateMultiplier(mines.minesIndex.length,trueClicks)
+      dispatch(upateMultiplier(multiplier.toFixed(2)))
     }
     if(image==="/src/assets/diamond.jpg"){
       dispatch(isLive())

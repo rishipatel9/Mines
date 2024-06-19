@@ -6,14 +6,16 @@ import { fillUp } from "../../utility/minesIndexSlice.js";
 import axios from "axios";
 import Navbar from "../ui/Navbar.js";
 import Tile from "./Tile.js";
-import { selectBet, selectDiamondCount, selectDisplayAll, selectMinesIndex } from "../../store/selectors.js";
+import { selectBet, selectDiamondCount, selectDisplayAll, selectMinesIndex, selectMultiplier } from "../../store/selectors.js";
 import diamondImage from "../../assets/diamond.jpg";
 import minesImage from "../../assets/mines.jpg";
 import { isLive, toFalse } from "../../utility/betSlice.js";
 import { displayNone } from "../../utility/displayAns.js";
-import bombIcon from "../../assets/bomb.png";
+import bombIcon from "../../assets/round-bomb.png";
 import diamondIcon from "../../assets/diamond.png";
 import { setDiamondCount } from "../../utility/diamondCount.js";
+// import { updateBetAmount } from "../../utility/betAmount.js";
+
 
 const Game = () => {
 
@@ -24,15 +26,16 @@ const Game = () => {
     const finalMinesIndex=useSelector(selectMinesIndex);
     const isBetLive=useSelector(selectBet)
     const diamondCount=useSelector(selectDiamondCount)
+    const multiplier=useSelector(selectMultiplier);
 
     axios.defaults.withCredentials = true;
+
     const gridSize = 25; 
     const numbers = Array.from({ length: 24 }, (_, i) => i + 1);
     const tiles = Array.from({ length: 25 }, (_, i) => i + 1);
 
     const mineIndexUpdateHandler=()=>{
-        console.log(mines);
-        dispatch(setDiamondCount(25-mines))
+        dispatch(setDiamondCount(25 - mines));
         const mineIndex: number[] = [];
         while (mineIndex.length < mines) {
             const index = Math.floor(Math.random() * gridSize);
@@ -82,7 +85,7 @@ const Game = () => {
                             <p className="text-left text-sm font-bold text-[#B2BBD3] p-1"> ₹0.00</p>
                         </div>
                         <div className="  lg:w-[100%] bg-[#304553] p-[1px] rounded-sm flex shadow-md">
-                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] md:h-[30px] md:w-[60%] sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3]" type="number" />
+                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold"  type="number" />
                             <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" >1/2</div>
                             <div className="lg:w-[1px] lg:h-[39px] sm:w-[1%] w-[1%] bg-[#0E222E] "></div>
                             <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition">2X</div>
@@ -102,17 +105,17 @@ const Game = () => {
                         <div className="lg:w-[100%] lg:h-auto lg:px-2 lg:pb-1 md:px-2 w-[100%] h-auto px-2 py-1 lg:flex flex">
                             <div className="lg:w-[100%] lg:h-auto pr-3  md:w-[50%] md:h-auto w-[50%] h-16  text-[#B2BBD3] text-sm font-bold ">
                                 <p className="text-[#B2BBD3] text-sm font-bold py-1">Mines</p>
-                                <div className="lg:w-[97%] lg:h-10  md:h-[35px] md:w-[100%] h-10  bg-[#2D4453] shadow-custom rounded-sm flex justify-between items-center  px-2  text-white "><div>{mines}</div><div>{}</div></div>
+                                <div className="lg:w-[97%] lg:h-10  md:h-[35px] md:w-[100%] h-10  bg-[#2D4453] shadow-custom rounded-sm flex justify-between items-center  px-2  text-white "><div>{mines}</div><div><img src={bombIcon} alt="" /></div></div>
                             </div>
                             <div className="lg:w-[100%] lg:h-auto pl-1 md:w-[50%] md:h-auto w-[50%] h-16   text-[#B2BBD3] text-sm font-bold ">
                                 <p className="text-[#B2BBD3] text-sm font-bold py-1">Gems</p>
-                                <div className="lg:w-[97%] lg:h-10 md:h-[35px]  md:w-[100%] h-10  bg-[#2D4453] shadow-custom rounded-sm flex  justify-between items-center px-2  text-white "><div>{diamondCount}</div><div>{}</div></div>
+                                <div className="lg:w-[97%] lg:h-10 md:h-[35px]  md:w-[100%] h-10  bg-[#2D4453] shadow-custom rounded-sm flex  justify-between items-center px-2  text-white "><div>{diamondCount}</div><div><img src={diamondIcon} alt="" /></div></div>
                             </div>
                         </div>
                     }
                     {isBetLive.bet &&
                         <div className="lg:w-[100%] lg:h-auto  lg:px-2 lg:py-2  md:px-2 w-[100%] h-auto px-2 lg:flex-col">
-                            <p className="text-[#B2BBD3] text-sm font-bold py-1">Total Profit</p>
+                            <p className="text-[#B2BBD3] text-sm font-bold py-1">Total Profit {multiplier}</p>
                             <div className="lg:w-[98%] lg:h-11 md:h-[35px] h-10 bg-[#2D4453] shadow-custom  flex justify-start items-center px-2 text-white font-bold">100</div>
                         </div>
                     }
