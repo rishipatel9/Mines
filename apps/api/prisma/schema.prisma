@@ -15,9 +15,9 @@ datasource db {
 
 model User{
   id Int @id @default(autoincrement())
-  name String 
+  name String @unique
   cash Int @default(1000)
-  game Game[]
+  game Game[] 
 }
 
 model Game{
