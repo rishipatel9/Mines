@@ -8,12 +8,12 @@ export const multiplierSlice =createSlice({
     name:'multiplier',
     initialState,
     reducers:{
-        upateMultiplier:(state,action)=>{
+        updateMultiplier:(state,action)=>{
             state.multiplier=action.payload
         }
     }
 })
 
-export const {upateMultiplier} =multiplierSlice.actions
+export const {updateMultiplier} =multiplierSlice.actions
 
 export default multiplierSlice.reducer;

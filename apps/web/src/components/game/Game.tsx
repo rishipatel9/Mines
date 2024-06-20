@@ -1,32 +1,37 @@
 
 import {  useEffect, useState } from "react";
+import { selectBet, selectBetAmount, selectCash, selectDiamondCount, selectDisplayAll, selectMinesIndex, selectMultiplier } from "../../store/selectors.js";
 import {  useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fillUp } from "../../utility/minesIndexSlice.js";
+import { isLive, toFalse } from "../../utility/betSlice.js";
+import {  displayNone } from "../../utility/displayAns.js";
+import { updateBetAmount } from "../../utility/betAmount.js";
+import { setDiamondCount } from "../../utility/diamondCount.js";
+import { resetClicks } from "../../utility/tileSlice.js";
 import axios from "axios";
-import Navbar from "../ui/Navbar.js";
 import Tile from "./Tile.js";
-import { selectBet, selectDiamondCount, selectDisplayAll, selectMinesIndex, selectMultiplier } from "../../store/selectors.js";
+import Navbar from "../ui/Navbar.js";
 import diamondImage from "../../assets/diamond.jpg";
 import minesImage from "../../assets/mines.jpg";
-import { isLive, toFalse } from "../../utility/betSlice.js";
-import { displayNone } from "../../utility/displayAns.js";
 import bombIcon from "../../assets/round-bomb.png";
 import diamondIcon from "../../assets/diamond.png";
-import { setDiamondCount } from "../../utility/diamondCount.js";
-// import { updateBetAmount } from "../../utility/betAmount.js";
 
 
 const Game = () => {
 
-    const setDisplayAll =useSelector(selectDisplayAll)
     const [mines,setMines]=useState(1);
+    const [invalidAmount,setInvalidAmount]=useState(false);
+    const setDisplayAll =useSelector(selectDisplayAll)
     const history=useNavigate();
     const dispatch=useDispatch();
     const finalMinesIndex=useSelector(selectMinesIndex);
     const isBetLive=useSelector(selectBet)
     const diamondCount=useSelector(selectDiamondCount)
     const multiplier=useSelector(selectMultiplier);
+    const betAmount=useSelector(selectBetAmount);
+    const cash=useSelector(selectCash);
+
 
     axios.defaults.withCredentials = true;
 
@@ -43,15 +48,41 @@ const Game = () => {
                 mineIndex.push(index);
             }
         }  
+        for(let i=0;i<mineIndex.length;i++){
+            if(!mineIndex.includes(i)){
+                console.log(i)
+            }
+        }
         dispatch(fillUp(mineIndex))
     };
     
+    const updatingBackend=async ()=>{
+        try{
+            const res=await axios.post('http://localhost:3000/user/update-balance',betAmount);
+            console.log(res);
+        }catch(error){
+            console.log(error);
+        }
+    }
+
     const setBetLive=()=>{
+        if(betAmount===0){
+            setInvalidAmount(true)
+            return 
+        }
+        if(!setDisplayAll.display){
+            if(betAmount>parseInt(cash)){
+                setInvalidAmount(true)
+            }
+        }
         if(isBetLive.bet===true){
             dispatch(toFalse())
             dispatch(displayNone())
+            dispatch(resetClicks());
             return 
         }
+        updatingBackend()
+        setInvalidAmount(false)
         dispatch(isLive())
     }
 
@@ -63,12 +94,19 @@ const Game = () => {
             }
         }
         isAuth()
-    },[])
+    },[history])
 
     const handleOnchange=(event:any)=>{
         setMines(event.target.value)
     }   
 
+    const handleBetAmountChange = (event:any) => {
+        let value = event.target.value.replace(/^0+/, '');
+        value = value === '' ? '0' : value;
+        dispatch(updateBetAmount(parseInt(value, 10)));
+    };
+
+    
     
     return (
 
@@ -84,15 +122,18 @@ const Game = () => {
                             <p className="text-left text-sm font-bold text-[#B2BBD3] p-1">Bet Amount</p>
                             <p className="text-left text-sm font-bold text-[#B2BBD3] p-1"> ₹0.00</p>
                         </div>
+                            {invalidAmount && 
+                                <p className="text-red-500">Invalid Amount</p>
+                            }
                         <div className="  lg:w-[100%] bg-[#304553] p-[1px] rounded-sm flex shadow-md">
-                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold"  type="number" />
-                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" >1/2</div>
+                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] pl-2 sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold" onChange={handleBetAmountChange} value={(betAmount)} type="number" />
+                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" onClick={()=>dispatch(updateBetAmount((betAmount/2).toFixed(2)))} >1/2</div>
                             <div className="lg:w-[1px] lg:h-[39px] sm:w-[1%] w-[1%] bg-[#0E222E] "></div>
-                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition">2X</div>
+                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition" onClick={()=>dispatch(updateBetAmount((betAmount*2).toFixed(2)))}>2X</div>
                         </div>
                     </div>
                    {!isBetLive.bet &&  <div className="lg:px-2 px-2 ">
-                        <p className="text-left text-xs font-bold text-[#B2BBD3] p-1 "> Mines</p> 
+                        <p className="text-left text-sm font-bold text-[#B2BBD3] p-1 "> Mines</p> 
                         <select name="cars" id="cars" className="bg-[#0E222E]  lg:h-[43px] lg:w-[100%] md:h-[30px]  md:w-[100%] sm:w-[100%] sm:h-[35px] h-8 w-[100%]  lg:p-2  text-white border- border-[#0E222E] shadow-md " onChange={handleOnchange} value={mines}>
                             {numbers.map(number => (
                                 <option key={number} value={number}>
@@ -116,14 +157,14 @@ const Game = () => {
                     {isBetLive.bet &&
                         <div className="lg:w-[100%] lg:h-auto  lg:px-2 lg:py-2  md:px-2 w-[100%] h-auto px-2 lg:flex-col">
                             <p className="text-[#B2BBD3] text-sm font-bold py-1">Total Profit {multiplier}</p>
-                            <div className="lg:w-[98%] lg:h-11 md:h-[35px] h-10 bg-[#2D4453] shadow-custom  flex justify-start items-center px-2 text-white font-bold">100</div>
+                            <div className="lg:w-[98%] lg:h-11 md:h-[35px] h-10 bg-[#2D4453] shadow-custom  flex justify-start items-center px-2 text-white font-bold">{(multiplier*betAmount).toFixed(2)}</div>
                         </div>
                     }
                     <div className="lg:w-[100%] lg:p-2 lg:py-4 md:pb-2  pt-5 pb-3 ">
                         <button className="lg:w-[100%] lg:h-[50px] lg:mx-0 w-[95%] h-[48px] mx-2 rounded-sm font-bold bg-[#00E800]  " onClick={()=>{
                             mineIndexUpdateHandler()
                             setBetLive()
-                        }}>{setDisplayAll.display ? "Bet again" :"Bet"}</button>
+                        }}>{isBetLive.bet && "Cashout"}{!setDisplayAll.display && !isBetLive.bet &&  "Bet" }</button>
                     </div>
                 </div>
                 <div className="lg:w-[75%] lg:h-[100%]   md:h-[410px] h-[390px] p-1 bg-[#0E222E] shadow-md flex justify-center lg:p-2">

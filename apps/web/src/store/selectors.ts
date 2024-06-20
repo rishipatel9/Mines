@@ -14,3 +14,5 @@ export const selectMultiplier=(state:any)=>state.multiplier.multiplier;
 export const selectPayout=(state:any)=>state.payout.payout
 
 export const selectBetAmount=(state:any)=>state.betAmount.betAmount
+
+export const selectCash=(state:any)=>state.cash.cash

@@ -8,6 +8,8 @@ import diamondCountReducer from "../utility/diamondCount.js"
 import multiplierReducer from "../utility/multiplier.js";
 import payoutReducer from "../utility/payout.js"
 import betAmountReducer from "../utility/betAmount.js";
+import cashReducer from "../utility/cash.js"
+
 
 export const store=configureStore({
     reducer:{
@@ -18,6 +20,7 @@ export const store=configureStore({
         tiles: tileReducer,
         multiplier:multiplierReducer,
         payout:payoutReducer,
-        betAmount:betAmountReducer
+        betAmount:betAmountReducer,
+        cash:cashReducer
     }
 })
