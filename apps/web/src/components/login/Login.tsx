@@ -34,11 +34,9 @@ const Login = () => {
       username = getRandomUsername()
     }
     try {
-      // console.log(username);
       setLoading(true)
       await axios.post("http://localhost:3000/user/createuser", { username });
       setLoading(false)
-      // console.log(res);
       history("/game")
     } catch (error) {
       console.error("Error creating user:", error);

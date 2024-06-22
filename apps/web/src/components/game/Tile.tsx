@@ -1,6 +1,6 @@
 import { selectBet, selectDisplayAll, selectMinesIndex } from "../../store/selectors.js";
 import { useDispatch, useSelector } from "react-redux";
-import { isLive } from "../../utility/betSlice.js";
+import { toFalse } from "../../utility/betSlice.js";
 import { displayAll } from "../../utility/displayAns.js";
 import { addClick, resetClicks } from "../../utility/tileSlice.js";
 import { updateDiamondCount } from "../../utility/diamondCount.js";
@@ -34,7 +34,7 @@ const Tile: React.FC<TileProps> = ({ image, index }) => {
 
   function calculateMultiplier(mines: number, diamonds: number): number {
     const houseEdge = 0.01; // Unified house edge
-    console.log((1 - houseEdge) * nCr(25, diamonds) / nCr(25 - mines, diamonds));
+    // console.log((1 - houseEdge) * nCr(25, diamonds) / nCr(25 - mines, diamonds));
     return (1 - houseEdge) * nCr(25, diamonds) / nCr(25 - mines, diamonds);
   }
 
@@ -52,7 +52,7 @@ const Tile: React.FC<TileProps> = ({ image, index }) => {
 
     if (image === "/src/assets/diamond.jpg") {
       console.log("hello");
-      dispatch(isLive());
+      dispatch(toFalse());
       dispatch(displayAll());
       dispatch(resetClicks());
     }

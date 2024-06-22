@@ -9,7 +9,6 @@ export const payoutSlice=createSlice({
     initialState,
     reducers:{
         updateBetAmount:(state,actions)=>{
-            console.log("payload",actions.payload);
             state.betAmount=actions.payload
         }
     }
