@@ -20,6 +20,16 @@ module.exports = {
       boxShadow: {
         'custom': 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
       },
+      keyframes: {
+        cashoutAnimation: {
+          '0%': { transform: 'scale(1)', opacity: '0.5' },
+          '50%': { transform: 'scale(1.1)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '0.5' },
+        },
+      },
+      animation: {
+        cashout: 'cashoutAnimation 1s ease-in-out infinite',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

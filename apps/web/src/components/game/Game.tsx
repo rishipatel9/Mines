@@ -5,7 +5,7 @@ import {  useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fillUp } from "../../utility/minesIndexSlice.js";
 import { isLive, toFalse } from "../../utility/betSlice.js";
-import {   displayNone } from "../../utility/displayAns.js";
+import { displayAll, displayNone } from "../../utility/displayAns.js";
 import { updateBetAmount } from "../../utility/betAmount.js";
 import { setDiamondCount } from "../../utility/diamondCount.js";
 import { resetClicks } from "../../utility/tileSlice.js";
@@ -25,6 +25,8 @@ const Game = () => {
 
     const [mines,setMines]=useState(1);
     const [invalidAmount,setInvalidAmount]=useState(false);
+    const [details1,setDetails1]=useState(0);
+    const [details2,setDetails2]=useState(0);
     const setDisplayAll =useSelector(selectDisplayAll)
     const history=useNavigate();
     const dispatch=useDispatch();
@@ -45,6 +47,11 @@ const Game = () => {
     const tiles = Array.from({ length: 25 }, (_, i) => i + 1);
 
     const mineIndexUpdateHandler=()=>{
+        if (betAmount === 0) {
+            console.log(0);
+            setInvalidAmount(true);
+            return;
+        }
         dispatch(setDiamondCount(25 - mines));
         const mineIndex: number[] = [];
         while (mineIndex.length < mines) {
@@ -59,7 +66,6 @@ const Game = () => {
         }
         dispatch(fillUp(mineIndex))
     };
-    
     
     const updateBalance = async (url: string, data: any) => {
         try {
@@ -96,6 +102,8 @@ const Game = () => {
         
         if (isBetLive.bet && !setDisplayAll.display) {
             dispatch(updatePayout(multiplier * betAmount));
+            setDetails1(multiplier);
+            setDetails2(payout);
         }
         if (isBetLive.bet === true) {
             getBalance();
@@ -110,6 +118,7 @@ const Game = () => {
             dispatch(displayNone());
             dispatch(resetClicks());
         }
+        setDisplayCashout(false);
         setInvalidAmount(false);
         dispatch(isLive());
         updateBalance('http://localhost:3000/user/update-balance', { cash: betAmount });
@@ -134,8 +143,8 @@ const Game = () => {
     }   
 
     const handleBetAmountChange = (event:any) => {
-        let value 
-        value = event.target.value.replace(/^0+/, '');
+        let value = event.target.value;
+        // value = event.target.value.replace(/^0+/, '');
         dispatch(updateBetAmount(parseInt(value, 10)));
     };
 
@@ -144,22 +153,26 @@ const Game = () => {
     }, [multiplier, betAmount, dispatch]);
 
     const handle=async()=>{
-         updateBalance('http://localhost:3000/user/update-payout', { payout: payout });
+        updateBalance('http://localhost:3000/user/update-payout', 
+         { payout: payout, 
+            multiplier:multiplier,
+            betAmount:betAmount,
+        });
         getBalance();
     }
+
     const handleCashout =  () => {
+        if(multiplier===0) return 
         try {
+            dispatch(displayAll());
+            setDetails1(multiplier)
+            setDetails2(payout)
             setDisplayCashout(true)
-            console.log("started cashout");
             handle()
             dispatch(updateMultiplier(0));
             dispatch(updatePayout(0));
             dispatch(updateBetAmount(0));
-            dispatch(displayNone());
-            dispatch(resetClicks());
             dispatch(toFalse());
-            console.log("finished cashout");
-
         } catch (error) {
             console.error(error);
         }
@@ -177,13 +190,13 @@ const Game = () => {
                     <div className="lg:p-2 px-2">
                         <div className="lg:w-[100%] flex justify-between">
                             <p className="text-left text-sm font-bold text-[#B2BBD3] p-1">Bet Amount</p>
-                            <p className="text-left text-sm font-bold text-[#B2BBD3] p-1"> ₹0.00</p>
+                            {/* <p className="text-left text-sm font-bold text-[#B2BBD3] p-1"> ₹0.00</p> */}
                         </div>
                             {invalidAmount && 
                                 <p className="text-red-500">Invalid Amount</p>
                             }
                         <div className="  lg:w-[100%] bg-[#304553] p-[1px] rounded-sm flex shadow-md">
-                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] pl-2 sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold"  placeholder="0.00" onChange={handleBetAmountChange} min="0" value={betAmount} readOnly={isBetLive.bet}  type="number" />
+                            <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] pl-2 sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold"  placeholder="0.00" onChange={handleBetAmountChange}  value={betAmount} readOnly={isBetLive.bet}  type="number" />
                             <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" onClick={()=>dispatch(updateBetAmount((betAmount/2).toFixed(2)))} >1/2</div>
                             <div className="lg:w-[1px] lg:h-[39px] sm:w-[1%] w-[1%] bg-[#0E222E] "></div>
                             <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition" onClick={()=>dispatch(updateBetAmount((betAmount*2).toFixed(2)))}>2X</div>
@@ -231,15 +244,15 @@ const Game = () => {
                             // finalMinesIndex.includes(index) ? <Tile key={index} image={diamondImage}/>: <Tile key={index} image={minesImage} />
                             <Tile key={index} image={finalMinesIndex.minesIndex.includes(index) ?  diamondImage :minesImage} index={index} />
                         ))}
+                        {displayCashout && <div className='absolute inset-0 bg-black opacity-25'></div>}
                         
                         {displayCashout && 
-                        <div className="lg:h-[90px] lg:w-[120px] absolute bg-[#203844] top-[42%] flex-col px-15 border-2 border-[#00E800] rounded-sm justify-center items-center ">
-                            <div className="text-center text-[#00E800] font-extrabold text-2xl  ">{multiplier}X</div>
-                            <div className="border-t-2"></div>
-                            <div className="">{payout}</div>
+                        <div className="lg:h-[110px] lg:w-[160px] md:h-[80px] md:w-[120px] h-[70px] w-[110px] absolute bg-[#203844] top-[40%] flex flex-col justify-center items-center border-2 lg:gap-2 md:gap-1 gap-1 border-[#00E800] rounded-sm cashoutAnimation 1s ease-in-out infinite shadow-custom">
+                            <div className="text-center text-[#00E800] font-extrabold lg:text-3xl md:text-2xl text-xl   ">{details1}X</div>
+                            <div className="border-t-2 lg:w-[15%] lg:h-[1px] md:h-[1px] md:w-[20px] text-[#B2BBD3]  w-[15px] "></div>
+                            <div className=" text-center text-[#00E800] lg:text-sm font-bold text-xs  ">₹{details2}</div>
                         </div>
                     }
-                    {displayCashout && <div className='absolute inset-0 bg-black opacity-50'></div>}
                     </div>
                     
                 </div>

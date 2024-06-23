@@ -38,7 +38,7 @@ const Navbar = () => {
     <div className="2xl:h-12 lg:h-16 w-screen md:h-16  h-12 bg-[#203844] absolute top-0 flex justify-center shadow-md" >
       <div className="lg:w-[1000px] w-[350px] lg:pt-4  flex justify-between items-center p-3">
         <div className="text-[#00E800] text-2xl font-bold ">Mines</div>
-        <div className="text-white bg-[#0E222E] lg:h-[40px]  lg:text-2xl  px-[10%] font-extrabold rounded-sm p-1 shadow-md ">{balance}</div>
+        <div className="text-white bg-[#0E222E] lg:h-[40px]  lg:text-2xl  px-[10%] font-extrabold rounded-sm p-1 shadow-md  ">₹{balance}</div>
         <div className="text-white ">
           <button className="bg-[#F44336] font-bold lg:p-2 rounded-sm border p-1 border-white shadow-md" onClick={removeCookie}>Logout</button>
         </div>
