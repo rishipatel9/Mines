@@ -39,11 +39,7 @@ app.post('/game',authMiddleware,(req,res)=>{
     })
 })
 
-app.post('/sendlist',authMiddleware,(req,res)=>{
-    return res.status(200).json({
-        message:"list send"
-    })
-})
+
 app.listen(PORT || 3000 ,()=>{
     console.log(`app is listening on port ${PORT}`)
 })

@@ -18,14 +18,16 @@ model User{
   name String @unique
   cash Int @default(1000)
   game Game[] 
+
+  createdAt  DateTime @default(now())
 }
 
 model Game{
   id  Int @id @default(autoincrement())
-  bet String
-  multiplier String
-  payout String
+  bet Int
+  multiplier Int
+  payout Int 
   userId Int
   user User @relation(fields: [userId],references: [id])
-
+  createdAt  DateTime @default(now())
 }

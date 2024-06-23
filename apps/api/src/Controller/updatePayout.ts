@@ -3,14 +3,16 @@ import prisma from "../lib/prisma";
 
 export const updatePayout = async (req: Request, res: Response) => {
   const { myCookie } = req.cookies;
-  const { payout } = req.body;
-//   console.log(payout);
+  const { payout,multiplier,betAmount } = req.body;
+  console.log(req.body);
   if (!myCookie) return res.status(401).json({ message: "User unauthorized" });
 
   if (isNaN(parseInt(payout))) {
     return res.status(400).json({ message: "Invalid cash amount" });
   }
   try {
+
+    
     const user = await prisma.user.findUnique({
       where: {
         name: myCookie,
@@ -36,7 +38,16 @@ export const updatePayout = async (req: Request, res: Response) => {
       });
 
       console.log('payout updated sucessFully')
-      return res.status(200).json({balance:updatedUser.cash})
+      res.status(200).json({balance:updatedUser.cash})
+      
+      const game = await prisma.game.create({
+        data: {
+          bet: parseInt(betAmount),
+          multiplier: parseFloat(multiplier),
+          payout: parseInt(payout),
+          userId: user.id,
+        },
+      });
     
   } catch (error) {
     console.error(error);
