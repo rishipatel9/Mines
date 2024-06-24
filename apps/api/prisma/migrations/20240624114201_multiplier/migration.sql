@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Game" ALTER COLUMN "multiplier" SET DATA TYPE DOUBLE PRECISION;

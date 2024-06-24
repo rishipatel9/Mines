@@ -51,7 +51,7 @@ const Tile: React.FC<TileProps> = ({ image, index }) => {
   }
 
   const handleClick = () => {
-    if (isBetLive.bet) {
+    if (isBetLive.bet && !clicks[index]) {
       dispatch(addClick({ index, value: true }));
       dispatch(updateDiamondCount());
       const trueClicks = clicks.filter((click: boolean) => click === true).length + 1; 

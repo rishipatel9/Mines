@@ -20,6 +20,7 @@ export const updatePayout = async (req: Request, res: Response) => {
       select: {
         id: true,
         cash: true,
+        name:true
       },
     });
 
@@ -48,6 +49,7 @@ export const updatePayout = async (req: Request, res: Response) => {
           userId: user.id,
         },
       });
+      console.log(multiplier);
     
   } catch (error) {
     console.error(error);

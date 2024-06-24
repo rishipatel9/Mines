@@ -12,7 +12,7 @@ function App() {
         <Routes>
           <Route path="/game" element={<Game/>} />
           <Route path="/" element={<Login/>}/>
-          <Route path="/leaderboard" element={<Bets/>}/>
+          <Route path="/bets" element={<Bets/>}/>
         </Routes>
       </BrowserRouter>
     </SkeletonTheme>
