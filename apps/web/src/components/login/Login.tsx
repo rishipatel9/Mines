@@ -10,7 +10,6 @@ const Login = () => {
   useEffect(()=>{
     const isLoggedin=async()=>{
       const res=await axios.post('http://localhost:3000/game');
-      console.log(res);
       if(res.status===200){
           history('/game');
       }

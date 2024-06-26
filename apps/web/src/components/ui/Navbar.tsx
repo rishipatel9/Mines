@@ -1,13 +1,9 @@
 
-import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import {  selectCash, } from "../../store/selectors.js";
-import {  useDispatch, useSelector } from "react-redux";
-import { toFalse } from "../../utility/betSlice.js";
-import { resetClicks } from "../../utility/tileSlice.js";
-import { displayNone } from "../../utility/displayAns.js";
-import { updatePayout } from "../../utility/payout.js";
-import { updateBetAmount } from "../../utility/betAmount.js";
+import {   useSelector } from "react-redux";
+
 import User from "../User.js";
 
 

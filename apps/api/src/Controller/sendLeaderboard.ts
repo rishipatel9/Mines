@@ -19,8 +19,9 @@ export const sendLeaderboard = async (req: Request, res: Response) => {
         payout: "desc",
       },
     });
+    // console.log(leaderboard);
 
-    res.json(leaderboard);
+    return res.status(200).json(leaderboard);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

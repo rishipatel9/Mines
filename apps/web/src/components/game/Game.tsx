@@ -139,7 +139,7 @@ const Game = () => {
             }
         }
         isAuth()
-    }, [history])
+    }, [])
 
     const handleOnchange = (event: any) => {
         setMines(event.target.value)
@@ -251,9 +251,9 @@ const Game = () => {
 
                         {displayCashout &&
                             <div className="lg:h-[110px] lg:w-[160px] md:h-[80px] md:w-[120px] h-[70px] w-[110px] absolute bg-[#203844] top-[40%] flex flex-col justify-center items-center border-2 lg:gap-2 md:gap-1 gap-1 border-[#00E800] rounded-sm cashoutAnimation 1s ease-in-out infinite shadow-custom">
-                                <div className="text-center text-[#00E800] font-extrabold lg:text-3xl md:text-2xl text-xl   ">{details1}X</div>
+                                <div className="text-center text-[#00E800] font-extrabold lg:text-3xl md:text-2xl text-xl   ">{details1.toString()}X</div>
                                 <div className="border-t-2 lg:w-[15%] lg:h-[1px] md:h-[1px] md:w-[20px] text-[#B2BBD3]  w-[15px] "></div>
-                                <div className=" text-center text-[#00E800] lg:text-sm font-bold text-xs  ">₹{details2}</div>
+                                <div className=" text-center text-[#00E800] lg:text-sm font-bold text-xs  ">₹{details2.toString()}</div>
                             </div>
                         }
                     </div>

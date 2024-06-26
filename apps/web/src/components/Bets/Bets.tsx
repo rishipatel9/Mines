@@ -8,10 +8,12 @@ const Bets = () => {
   axios.defaults.withCredentials = true;
   const [bets, setBets] = useState<number[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [nobets,setNobets]=useState<Boolean>(false);
 
   useEffect(() => {
     const isAuth = async () => {
       const res = await axios.post('http://localhost:3000/user/send-bets');
+      if(res.data.games.length==0) setNobets(true)
       setBets(res.data.games)
       setLoading(false);
     }
@@ -29,6 +31,7 @@ const Bets = () => {
       <Navbar></Navbar>
       <div className="lg:h-[600px] lg:w-[1000px] xl:flex-col  h-[600px] w-[350px]  bg-[#203844]  rounded-md shadow-xl overflow-auto ">
         <div className="lg:w-[100%] lg:h-[50px]  lg:text-2xl md:h-[50px] h-[50px]  lg:font-bold bg-[#0E222E] flex justify-center items-center text-white  "> Leaderboard</div>
+        {nobets ?  <div className=" text-[#B2BBD3] font-bold lg:text-2xl md:xl  text-center flex justify-center items-center w-[100%] h-[70%]">No Recent Bets</div> :
         <table className="min-w-full border-collapse ">
           <thead>
             <tr>
@@ -55,6 +58,7 @@ const Bets = () => {
                 </td>
               </tr>
             ) : (
+              
               bets && bets.map((entry: any, index: any) => (
                 <tr key={index} className={`${index % 2 === 0 && !loading ? 'bg-[#0E222E]' : 'bg-[#203844]'} lg:h-10`}>
                   <td className="text-center mx-2 text-[#B2BBD3] font-bold">{formatDate(entry.createdAt)}</td>
@@ -63,9 +67,12 @@ const Bets = () => {
                   <td className="text-center mx-2 text-[#B2BBD3] font-bold">{entry.payout}</td>
                 </tr>
               ))
-            )}
+              )}
+
+
+
           </tbody>
-        </table>
+        </table>}
       </div>
     </div>
 

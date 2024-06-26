@@ -3,6 +3,7 @@ import Game from "./components/game/Game.js";
 import Bets from "./components/Bets/Bets.js";
 import Login from "./components/login/Login.js";
 import { SkeletonTheme } from "react-loading-skeleton";
+import Leaderboard from "./components/leaderboard/Leaderboard.js";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path="/game" element={<Game/>} />
           <Route path="/" element={<Login/>}/>
           <Route path="/bets" element={<Bets/>}/>
+          <Route path="/leaderboard" element={<Leaderboard/>}/>
         </Routes>
       </BrowserRouter>
     </SkeletonTheme>

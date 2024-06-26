@@ -51,9 +51,14 @@ const User = () => {
                 <div className="absolute right-0 mt-2 w-48 bg-[#203844]  rounded-md shadow-lg">
                     <div className="py-1">
                         <a href="#" className="block px-4 py-2 text-sm text-[#B2BBD3] hover:bg-[#0E222E]" onClick={redirectBets}>Recent Bets</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-[#B2BBD3] hover:bg-[#0E222E]">Leaderboard</a>
-                        <a href="#" className="block px-4 py-2 text-sm text-[#00E800] hover:bg-[#0E222E]" onClick={()=>
-                        history('/game')}>Game</a>
+                        <a href="#" className="block px-4 py-2 text-sm text-[#B2BBD3] hover:bg-[#0E222E]" onClick={()=>{
+                            setShowMenu(false)
+                            history('/leaderboard')
+                        }}>Leaderboard</a>
+                        <a href="#" className="block px-4 py-2 text-sm text-[#00E800] hover:bg-[#0E222E]" onClick={()=>{
+                            setShowMenu(false)
+                            history('/game')}}>Game</a>
+        
                         <a href="#" className="block px-4 py-2 text-sm text-[#B2BBD3] bg-[#F44336] hover:bg-[#0E222E]" onClick={removeCookie}>Sign out</a>
 
                     </div>

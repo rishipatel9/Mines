@@ -15,7 +15,7 @@ datasource db {
 
 model User{
   id Int @id @default(autoincrement())
-  name String @unique
+  name String @unique 
   cash Int @default(1000)
   game Game[] 
 
@@ -27,7 +27,7 @@ model Game{
   bet Int
   multiplier Float
   payout Int 
-  userId Int
-  user User @relation(fields: [userId],references: [id])
+  userId String
+  user User @relation(fields: [userId],references: [name]) 
   createdAt  DateTime @default(now())
 }

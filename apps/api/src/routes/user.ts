@@ -2,6 +2,7 @@ import express from 'express';
 import createUser from '../Controller/createUser';
 import { getBalance } from '../Controller/getBalance';
 import { sendBets } from '../Controller/sendBets';
+import { sendLeaderboard } from '../Controller/sendLeaderboard';
 import { updateBalance } from '../Controller/updateBalance';
 // import { sendLeaderboard } from '../Controller/sendLeaderboard';
 import { updatePayout } from '../Controller/updatePayout';
@@ -29,7 +30,7 @@ user.post('/send-bets',authMiddleware,(req,res)=>{
     sendBets(req, res);
 })
 
-// user.post('/send-leaderboard',authMiddleware,(req,res)=>{
-//     sendLeaderboard(req,res);
-// })
+user.post('/send-leaderboard',authMiddleware,(req,res)=>{
+    sendLeaderboard(req,res);
+})
 export default user 
