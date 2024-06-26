@@ -15,10 +15,10 @@ export const sendBets = async (req: Request, res: Response) => {
                 id: true
             }
         });
-        if (!user) return res.status(404).json({ message: "user not found" });
-
+        if (!user) return res.status(404).json({ message: "user not found" });  
         const games = await prisma.game.findMany({
             where: {
+                
                 userId: user.id,
             },
         });

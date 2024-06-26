@@ -27,7 +27,7 @@ model Game{
   bet Int
   multiplier Float
   payout Int 
-  userId String
-  user User @relation(fields: [userId],references: [name]) 
+  userId Int
+  user User @relation(fields: [userId],references: [id]) 
   createdAt  DateTime @default(now())
 }
