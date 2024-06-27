@@ -18,11 +18,12 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'ascending' });
+  const BASE_URL =import.meta.env.VITE_BASE_URL
 
   useEffect(() => {
     const getLeaderboard = async () => {
       try {
-        const res = await axios.post('http://localhost:3000/user/send-leaderboard');
+        const res = await axios.post(`${BASE_URL}/user/send-leaderboard`);
         setLeaderboard(res.data);
         setLoading(false);
       } catch (error) {

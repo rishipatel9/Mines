@@ -13,6 +13,7 @@ const User = () => {
     const [showMenu, setShowMenu] = useState<Boolean>(false);
     const dispatch = useDispatch();
     const history=useNavigate();
+    const BASE_URL =import.meta.env.VITE_BASE_URL
     const toggleMenu = () => {
         setShowMenu(!showMenu);
     };
@@ -20,7 +21,7 @@ const User = () => {
 
     const removeCookie = async () => {
         try {
-            await axios.get("http://localhost:3000/clear-cookie", {
+            await axios.get(`${BASE_URL}/clear-cookie`, {
                 withCredentials: true,
             });
             dispatch(updatePayout(0))

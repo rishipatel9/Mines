@@ -21,6 +21,7 @@ const Tile: React.FC<TileProps> = ({ image, index }) => {
   const clicks = useSelector((state: any) => state.tiles.clicks);
   const mines = useSelector(selectMinesIndex);
   const betAmount=useSelector(selectBetAmount)
+  const BASE_URL =import.meta.env.VITE_BASE_URL
 
   function factorial(n: number): number {
     let result = 1;
@@ -60,7 +61,7 @@ const Tile: React.FC<TileProps> = ({ image, index }) => {
     }
 
     if (image === "/src/assets/diamond.jpg") {
-      updateBalance('http://localhost:3000/user/update-payout', 
+      updateBalance(`${BASE_URL}/user/update-payout`, 
          { payout: 0, 
             multiplier:0,
             betAmount:betAmount,

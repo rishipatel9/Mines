@@ -38,7 +38,7 @@ const Game = () => {
     const cash = useSelector(selectCash);
     const payout = useSelector(selectPayout);
     const [displayCashout, setDisplayCashout] = useState(false);
-
+    const BASE_URL =import.meta.env.VITE_BASE_URL
 
     axios.defaults.withCredentials = true;
 
@@ -80,7 +80,7 @@ const Game = () => {
 
     const getBalance = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/user/get-balance');
+            const response = await axios.post(`${BASE_URL}/user/get-balance`);
             dispatch(updateCash(response.data.balance));
         } catch (error) {
             console.error('Error getting balance:', error); // Debug log
@@ -123,7 +123,7 @@ const Game = () => {
         setInvalidAmount(false);
         dispatch(isLive());
         setDisplayCashout(false);
-        updateBalance('http://localhost:3000/user/update-balance', { cash: betAmount });
+        updateBalance(`${BASE_URL}/user/update-balance`, { cash: betAmount });
 
     }
 
@@ -133,7 +133,7 @@ const Game = () => {
 
     useEffect(() => {
         const isAuth = async () => {
-            const res = await axios.post('http://localhost:3000/game');
+            const res = await axios.post(`${BASE_URL}/game`);
             if (res.status === 201) {
                 history('/');
             }
@@ -156,7 +156,7 @@ const Game = () => {
     }, [multiplier, betAmount, dispatch]);
 
     const handle = async () => {
-        updateBalance('http://localhost:3000/user/update-payout',
+        updateBalance(`${BASE_URL}/user/update-payout`,
             {
                 payout: payout,
                 multiplier: multiplier,

@@ -15,7 +15,7 @@ export const getBalance= async (req:Request,res:Response,)=>{
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
+        console.log(user.cash)
         res.status(200).json({ balance: user.cash });
 
     }catch(error){

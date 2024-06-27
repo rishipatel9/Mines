@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"npx nodemon src/index.ts"
-
+    "dev":"npx nodemon src/index.ts",
+    "build":"npx nodemon dist/index.js"
   },
   "keywords": [],
   "author": "",

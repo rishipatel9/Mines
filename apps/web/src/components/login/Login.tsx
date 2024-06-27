@@ -2,14 +2,14 @@ import axios from 'axios';
 import  { useEffect, useState } from 'react'
 import {  useNavigate } from 'react-router-dom';
 
-
 const Login = () => {
   const [loading,setLoading]=useState(false);
   const history=useNavigate();
-
+  const BASE_URL =import.meta.env.VITE_BASE_URL
+  console.log(BASE_URL);
   useEffect(()=>{
     const isLoggedin=async()=>{
-      const res=await axios.post('http://localhost:3000/game');
+      const res=await axios.post(`${BASE_URL}/game`);
       if(res.status===200){
           history('/game');
       }
@@ -34,7 +34,8 @@ const Login = () => {
     }
     try {
       setLoading(true)
-      await axios.post("http://localhost:3000/user/createuser", { username });
+      console.log(BASE_URL);
+      await axios.post(`${BASE_URL}/user/createuser`, { username });
       setLoading(false)
       history("/game")
     } catch (error) {

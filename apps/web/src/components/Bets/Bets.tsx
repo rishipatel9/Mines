@@ -9,10 +9,11 @@ const Bets = () => {
   const [bets, setBets] = useState<number[]>();
   const [loading, setLoading] = useState<boolean>(true);
   const [nobets,setNobets]=useState<Boolean>(false);
+  const BASE_URL =import.meta.env.VITE_BASE_URL
 
   useEffect(() => {
     const isAuth = async () => {
-      const res = await axios.post('http://localhost:3000/user/send-bets');
+      const res = await axios.post(`${BASE_URL}/user/send-bets`);
       if(res.data.games.length==0) setNobets(true)
       setBets(res.data.games)
       setLoading(false);
