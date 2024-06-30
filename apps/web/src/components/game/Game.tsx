@@ -201,9 +201,9 @@ const Game = () => {
                         </div>
                         <div className="  lg:w-[100%] bg-[#304553] p-[1px] rounded-sm flex shadow-md">
                             <input className="bg-[#0E222E]  lg:h-10 lg:w-[60%] lg:pl-2 md:h-[30px] md:w-[60%] pl-2 sm:w-[70%]  h-8 w-[100%]  outline-[#304553] border border-[#304553] text-white  hover:outline-[#B2BBD3] input focus:outline-none font-bold" placeholder="0.00" onChange={handleBetAmountChange} value={betAmount} readOnly={isBetLive.bet} type="number" />
-                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" onClick={() => dispatch(updateBetAmount((betAmount / 2).toFixed(2)))} >1/2</div>
+                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%] w-[20%] flex justify-center items-center text-white text-xs hover:bg-[#B2BBD3] transition-all" onClick={() => dispatch(updateBetAmount(!isBetLive.bet ? (betAmount / 2).toFixed(2) : betAmount))} >1/2</div>
                             <div className="lg:w-[1px] lg:h-[39px] sm:w-[1%] w-[1%] bg-[#0E222E] "></div>
-                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition" onClick={() => dispatch(updateBetAmount((betAmount * 2).toFixed(2)))}>2X</div>
+                            <div className="lg:w-[20%] md:w-[20%] sm:w-[14%]  w-[20%] flex justify-center items-center text-white  text-xs hover:bg-[#B2BBD3] transition" onClick={() => dispatch(updateBetAmount(!isBetLive.bet ? (betAmount * 2).toFixed(2) : betAmount))}>2X</div>
                         </div>
                     </div>
                     {!isBetLive.bet && <div className="lg:px-2 px-2 ">
